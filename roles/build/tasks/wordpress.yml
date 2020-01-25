@@ -10,7 +10,6 @@
   args:
     chdir: "{{ application_source_directory }}"
   when: r_composer_stat.stat.exists == True
-	
 
 - name: "Run any custom 'npm run build' scripts"
   shell: "cd {{ item }} && npm run build"
