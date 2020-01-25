@@ -39,12 +39,12 @@ These are the steps to setup the WordPress environment:
 You'll end up with the following directory structure:
 
 	/build-and-deploy			# This Git repository
-	/src						# WordPress source goes here, managed by own git repository
-	/src/vendor					# Composer dependencies, if used
+	/src					# WordPress source goes here, managed by own git repository
+	/src/vendor				# Composer dependencies, if used
 	/src/wordpress				# WordPress core
 	/src/wp-content				# WordPress externals, e.g. plug-ins or themes
-	/src/.env					# DotEnv configuration file
-	/config/environment/prod	# Ansible production environment goes here, managed by own git repository
+	/src/.env				# DotEnv configuration file
+	/config/environment/prod		# Ansible production environment goes here, managed by own git repository
 	/config/credentials			# Credentials, e.g. PEMs go here, should not be managed by git
 
 
@@ -68,7 +68,7 @@ Note: `$ANSIBLE` is a shortcut for `ansible-playbook -i ../config/environment/pr
 
 | Task | Command | Note |
 | --- | --- | --- |
-|create a remote database dump and download it?|$ANSIBLE pull.yml --tags make-database-snapshot|Snapshot can be found in the .download directory|
+|create a remote database dump and download it?|$ANSIBLE pull.yml --tags make-database-snapshot|Snapshot can be found in the *.download* directory|
 |update local WordPress and all plug-ins?|$ANSIBLE update.yml||
 |deploy my local WordPress instance?|$ANSIBLE deploy.yml||
 
@@ -78,10 +78,11 @@ It
 - downloads the latest MySQL backup
 - imports the latest MySQL dump to the local database; *DROP TABLE IF EXISTS* is enabled
 
-
+```
 	$ $ANSIBLE fetch.yml
 	# if you also want to include uploaded files (images etc.), use the *with-uploads* tag
 	$ $ANSIBLE --tags with-uploads fetch.yml
+```
 
 ### Build only
 The *build.yml* create the .htaccess file for the local environment, activates the theme and all plug-ins defined in the `local.yml` file
@@ -95,8 +96,10 @@ It
 - copies the local WordPress files (themes, plug-ins) to the remote instance
 - enables the defined theme and plug-ins in the remote instance
 
+```
 	$ $ANSIBLE deploy.yml
-	
+```
+
 ### Pull only - pulls the remote data
 The *pull.yml* only retrieves the remote files, without intefering with WordPress itlsef
 
