@@ -1,0 +1,6 @@
+# Status of plug-ins must be toggled to apply database or configuration changes
+- name: Trigger WordPress database upgrade in any case
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} core update-db"
+  register: r_core_update
+  changed_when: "r_core_update.rc != 0"

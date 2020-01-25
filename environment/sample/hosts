@@ -1,0 +1,8 @@
+# local connection is required to install updates, pre-build JavaScript files and so on
+[local]
+localhost ansible_connection=local
+
+# this is the Uberspace host where the WordPress instance is deployed
+[remote]
+my_host.uberspace.de ansible_connection=ssh ansible_user=my_uberspace ansible_ssh_private_key_file=credentials/uberspace/my_uberspace
+

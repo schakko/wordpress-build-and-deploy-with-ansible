@@ -1,0 +1,12 @@
+# This task ensures that the downtime of the WordPress site/plug-in is as short as possible.
+
+# disable plug-in so we can ensure any activation hook
+- name: "Disable active plug-in: {{ plugin }}"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin toggle {{ plugin }}"
+
+# plug-ins are only re-activated if they are defined inside the wordpress.plugins variable
+- name: "(Re-)Activate plug-in {{ plugin }}"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin activate {{ plugin }}"
+  when: plugin in wordpress.plugins 

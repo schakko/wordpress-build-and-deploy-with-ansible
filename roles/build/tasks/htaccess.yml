@@ -1,0 +1,13 @@
+- name: "Set facts for templating"
+  set_fact:
+    web_https_only: "{{ web.https_only }}"
+    web_domain: "{{ web.domain }}"
+    web_rewrite_base: "{{ web.rewrite.base }}"
+    web_rewrite_url: "{{ web.rewrite.url }}"
+
+# for each environment (local, remote, ...) we generate accordingly the .htaccess file on the local Ansible host
+- name: "Generate .htaccess file"
+  template:
+    src: ".htaccess.j2"
+    dest: "{{ environment_build_directory }}/.htaccess"
+  delegate_to: localhost

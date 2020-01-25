@@ -1,0 +1,17 @@
+# database information is required to import the database dumps
+database:
+  host: 127.0.0.1
+  user: username
+  password: password
+
+tools:
+  # make sure to install wp-cli in your search path
+  wpcli: wp
+
+web:
+  https_only: no
+  # we are using xip.io
+  domain: my-uberspace.de.127.0.0.1.xip.io
+  rewrite:
+  #  base: "/projects/my-uberspace.de/"
+  #  url: ". /projects/my-uberspace.de/index.php [L]"

@@ -1,0 +1,5 @@
+- import_tasks: database.yml
+  tags: [ 'database' ]
+
+- import_tasks: filesystem.yml
+  tags: [ 'filesystem' ]

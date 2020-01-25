@@ -1,0 +1,4 @@
+- hosts: remote
+  roles:
+    - { role: common }
+    - { role: pull }

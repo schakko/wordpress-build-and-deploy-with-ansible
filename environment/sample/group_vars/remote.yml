@@ -1,0 +1,21 @@
+# on the remote host we don't need the database information
+## database:
+##  host: 127.0.0.1
+##  user: root
+##  password: root
+
+tools:
+  # Uberspace suggests to install wp-cli inside the bin/ directory inside the user's home directory
+  wpcli: ~/bin/wp
+
+web:
+  # main domain for our application
+  domain: www.my-uberspace.de
+  # Apache DocumentRoot
+  directory: "/var/www/virtual/my_uberspace/my-uberspace.de-src"
+  # Enforce redirect from HTTP to HTTPS in .htaccess
+  https_only: yes
+  rewrite:
+    # required for WordPress
+    base: "/"
+    url: ". /index.php [L]"

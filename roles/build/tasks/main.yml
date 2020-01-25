@@ -1,0 +1,6 @@
+- import_tasks: htaccess.yml
+  tags: [ 'htaccess' ]
+
+- import_tasks: wordpress.yml
+  tags: [ 'wordpress' ]
+  when: "environment_name == 'local'"

@@ -1,0 +1,8 @@
+- import_tasks: database.yml
+  tags: [ 'database' ]
+
+- import_tasks: filesystem.yml
+  tags: [ 'database' ]
+
+- import_tasks: wordpress.yml
+  tags: [ 'wordpress' ]

@@ -1,0 +1,38 @@
+﻿- name: "Expect remote databases exist on local machine"
+  mysql_db:
+    login_host: "{{ database.host }}"
+    login_user: "{{ database.user }}"
+    login_password: "{{ database.password }}"
+    name: "{{ item.name }}"
+    state: present
+  loop: "{{ databases }}"
+  when: "'local' in group_names"
+
+- name: "Dump"
+  debug: msg="{{ hostvars[groups['remote'][0]].web.domain }}"
+  
+- name: "Extract all local files"
+  shell:
+    "xzcat {{ item.src }} > {{ item.src }}.backup.sql"	
+  with_filetree: "{{ download_dir }}"
+  when: "'local' in group_names and item.state == 'file' and item.src.endswith('xz')"
+  
+- name: "Extract all local files"
+  shell:
+    "cat {{ item.src }} | sed -e 's/{{ hostvars[groups['remote'][0]].web.domain }}/{{ web.domain }}/g' | sed 's|https:|http:|g' > {{ item.src }}.ready"	
+  with_filetree: "{{ download_dir }}"
+  when: "'local' in group_names and item.state == 'file' and item.src.endswith('sql')"
+
+- name: "Import converted dumps into local database"
+  mysql_db:
+    login_host: "{{ database.host }}"
+    login_user: "{{ database.user }}"
+    login_password: "{{ database.password }}"
+    # resolve database name by using its directory name
+    # TODO m/b a mapping from source database to target database
+    #  get name of database based upon the filenamne (database.backup.sql.ready => database)
+    name: "{{ (item.src | dirname | basename).split(".")[0] }}"
+    target: "{{ item.src }}"
+    state: import
+  with_filetree: "{{ download_dir }}"
+  when: "'local' in group_names and item.state == 'file' and item.src.endswith('ready')"

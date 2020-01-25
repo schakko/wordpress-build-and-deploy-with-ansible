@@ -1,0 +1,17 @@
+# Composer is not required
+- name: "Check if composer is used"
+  stat:
+    path: "{{ application_source_directory }}/composer.json"
+  register: r_composer_stat
+  
+# At first we want to install any dependency on a fresh install
+- name: "Run 'composer install' to install all required packages"
+  shell: "composer install"
+  args:
+    chdir: "{{ application_source_directory }}"
+  when: r_composer_stat.stat.exists == True
+	
+
+- name: "Run any custom 'npm run build' scripts"
+  shell: "cd {{ item }} && npm run build"
+  with_items: "{{ build.vue_js }}"

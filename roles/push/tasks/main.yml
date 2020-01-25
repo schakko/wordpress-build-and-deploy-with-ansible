@@ -1,0 +1,5 @@
+- import_tasks: filesystem.yml
+  tags: [ 'filesystem' ]
+
+- import_tasks: wordpress.yml
+  tags: [ 'wordpress' ]

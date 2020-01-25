@@ -1,0 +1,46 @@
+- name: "Fail | If application_target_directory is not defined"
+  fail:
+    msg: "You have to specify web.directory if you are not on 'local'"
+  when: "application_target_directory is not defined"
+
+- name: "Assume target directory exists"
+  file:
+    path: "{{ application_target_directory }}"
+    state: directory
+
+- name: "Assume .env file exists"
+  file:
+    path: "{{ application_target_directory }}/.env"
+    state: file
+
+# If we are on one of our remote hosts, we push the whole source directory
+- name: Push source code only to remote targets
+  synchronize:
+    src: "{{ application_source_directory }}/"
+    dest: "{{ application_target_directory }}/"
+    rsync_opts:
+      # Directory and File permissions
+      - "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r"
+      - "--exclude=.git"
+      - "--exclude=.htaccess*"
+      - "--exclude=.env*"
+      - "--exclude=node_modules"
+      - "--exclude=**/wp-content/uploads"
+  when: "environment_name != 'local'"
+
+- name: "Set 0755 for application directory (@see https://manual.uberspace.de/en/web-documentroot.html)"
+  file:
+    path: "{{ application_target_directory }}"
+    mode: '0755'
+
+- name: "Copy {{ environment_build_directory }}/.htaccess to {{ application_target_directory }}"
+  copy:
+    src: "{{ environment_build_directory }}/.htaccess"
+    dest: "{{ application_target_directory }}/.htaccess"
+    force: yes
+
+# wp-content/uploads is explicitly excluded but it should exist on first run
+- name: "Assume wp-content/uploads directory exist"
+  file:
+    path: "{{ application_target_directory }}/wp-content/uploads"
+    state: directory

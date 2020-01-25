@@ -1,0 +1,26 @@
+# Enable output compression; Uberspace already GZips most of the files but not text/css
+AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript text/javascript application/json
+
+{% if web_https_only %}
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://{{ web_domain }}/$1 [R=301,L]
+{% endif %}
+
+# Make sure we don't leak any private information
+RedirectMatch 403 ^.*/.bak.*
+RedirectMatch 403 ^/vendor/.*$
+RedirectMatch 403 ^.*/.env
+RedirectMatch 403 ^.*/composer.*
+RedirectMatch 403 ^.*/.git/.*
+RedirectMatch 403 ^.*/.gitignore
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase {{ web_rewrite_base }}
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule {{ web_rewrite_url }}
+</IfModule>
+# END WordPress

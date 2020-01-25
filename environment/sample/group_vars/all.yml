@@ -1,0 +1,31 @@
+uberspace:
+  account: my_ubserpace
+
+wordpress:
+  # source directory of WordPress instance, relative to the Ansible directory
+  src: ../src/wordpress
+  # theme to activate
+  theme: twentytwenty
+  # plug-ins to use
+  # each plug-in which is *not* defined in this list will be disabled on the target host
+  plugins:
+    - advanced-ads
+    - bwp-google-xml-sitemaps
+    - ghostkit
+    - google-analytics-dashboard-for-wp
+    - polylang
+    - oembed-gist
+    - rewrite-rules-inspector
+    - simple-tags
+    - stops-core-theme-and-plugin-updates
+    - syntaxhighlighter
+    - wordpress-seo
+
+build:
+  # runs "npm run build" in each of these directories if you have vue.js in your theme
+  vue_js:
+  #  - "../src/wp-content/themes/my_theme/js/front"
+
+# The following databases are copied from remote Uberspace's latest backup directory to the local directory
+databases:
+  - name: uberspace_database

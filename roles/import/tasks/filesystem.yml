@@ -1,0 +1,3 @@
+# TODO copy assets to wp-content/uploads
+- debug:
+    msg: "Copy downloaded artifacts to wp-content/uploads"

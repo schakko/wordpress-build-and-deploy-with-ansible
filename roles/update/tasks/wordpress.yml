@@ -1,0 +1,29 @@
+- debug: msg="Updating local WordPress instance (core and plug-ins)"
+
+- name: Checking for WordPress update
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress.src }} core check-update --format=csv | wc -l"
+  register: r_wordpress_update_available
+  changed_when: "r_wordpress_update_available.rc != 0"
+
+- name: Set fact | is_wordpress_update_available
+  set_fact:
+    is_wordpress_update_available: "{{ r_wordpress_update_available.stdout != '0' }}"
+
+- name: Update WordPress core if update is available
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress.src }} core update"
+  when: is_wordpress_update_available
+
+- name: Trigger WordPress database upgrade in any case
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress.src }} core update-db"
+  register: r_core_update
+  changed_when: "r_core_update.rc != 0"
+
+- name: Try to update all WordPress plug-ins to latest version
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress.src }} --all plugin update"
+  register: r_plugins_update
+  # 'already updated' is printed when everything is available
+  changed_when: "'already updated' not in r_plugins_update.stdout"

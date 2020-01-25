@@ -1,0 +1,29 @@
+- name: "Assume .download exist"
+  file:
+    path: "{{ playbook_dir }}/.download"
+    state: directory
+  when: "'local' in group_names"
+  tags: ['always']
+
+- name: "Download remote database dumps"
+  synchronize:
+    mode: pull
+    src: "/backup/current/mysql_backup/current/{{ uberspace.account }}/{{ item.name }}.sql.xz"
+    dest: "{{ download_dir }}"
+  loop: "{{ databases }}"
+  when: "'remote' in group_names"
+  
+- name: "Create database snapshots"
+  shell: "mysqldump {{ item.name }} > {{ item.name }}.snapshot.sql"
+  loop: "{{ databases }}"
+  tags: ['never', 'make-database-snapshot']
+  when: "'remote' in group_names"
+
+- name: "Download database snapshots"
+  synchronize:
+    mode: pull
+    src: "~/{{ item.name }}.snapshot.sql"
+    dest: "{{ download_dir }}"
+  loop: "{{ databases }}"
+  when: "'remote' in group_names"
+  tags: ['never', 'make-database-snapshot']

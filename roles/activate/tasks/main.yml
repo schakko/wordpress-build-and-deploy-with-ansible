@@ -1,0 +1,2 @@
+- import_tasks: wordpress.yml
+  tags: [ 'wordpress' ]

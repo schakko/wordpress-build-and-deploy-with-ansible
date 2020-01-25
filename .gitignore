@@ -1,0 +1,5 @@
+.build
+.download
+*retry
+credentials/*
+environment/prod

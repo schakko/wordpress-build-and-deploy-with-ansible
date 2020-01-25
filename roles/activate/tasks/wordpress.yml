@@ -1,0 +1,55 @@
+- name: "Find active plug-ins (pre)"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin status | grep -e \"^\\s*A \" | tr -s ' ' | cut -d ' ' -f 3"
+  register: r_active_plugins_pre_activate
+
+- name: "Output status of all active plug-ins before activation"
+  copy:
+    content: "{{ r_active_plugins_pre_activate.stdout }}"
+    dest: "{{ environment_build_directory }}/active_plugins_pre_activate.txt"
+  delegate_to: localhost
+
+- name: "Install plug-ins defined in playbook if not already installed"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin install {{ item }}"
+  with_items: "{{ wordpress.plugins }}"
+  when: item not in r_active_plugins_pre_activate.stdout
+
+# create a union list between active and to-be-activated plug-ins and remove any duplicates.
+- name: "plugins | Fact"
+  set_fact:
+    plugins: "{{ (r_active_plugins_pre_activate.stdout_lines + wordpress.plugins)|list|flatten|unique }}"
+
+- name: Ensure activation of all defined plug-ins
+  include_tasks: change_plugin_status.yml
+  with_items: "{{ plugins }}"
+  loop_control:
+    loop_var: plugin
+
+- name: "Find active plug-ins on reference host (post)"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin status | grep -e \"^\\s*A \" | tr -s ' ' | cut -d ' ' -f 3"
+  register: r_active_plugins_post_activate
+
+- name: "Output status of all active plug-ins after activation"
+  copy:
+    content: "{{ r_active_plugins_post_activate.stdout }}"
+    dest: "{{ environment_build_directory }}/active_plugins_post_activate.txt"
+  delegate_to: localhost
+
+- name: "Calculate difference between pre/post plug-in list"
+  shell:
+    "diff {{ environment_build_directory }}/active_plugins_pre_activate.txt {{ environment_build_directory }}/active_plugins_post_activate.txt"
+  delegate_to:
+    localhost
+  ignore_errors: yes
+  register: r_plugin_diff_pre_post
+
+- name: "Differential between pre/posdt plug-in activation"
+  debug:
+    var: r_plugin_diff_pre_post
+    verbosity: 0
+
+- name: "Enable theme"
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} theme activate {{ wordpress.theme }}"

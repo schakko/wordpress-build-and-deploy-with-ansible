@@ -1,0 +1,5 @@
+# contains the absolute path to the local directory where the source code for application (e.g. WordPress) is located
+# we assume that this is side by side with the Ansible directory ($PROJECT/build-and-deploy, $PROJECT/src)
+application_source_directory: "{{ playbook_dir }}/../src"
+# contains the absolute path to the target directory where wp-cli is executed or changes are applied. On local systems, this equals to application_source_directory but can be overwritten for remote hosts
+application_target_directory: "{{ playbook_dir }}/../src"
