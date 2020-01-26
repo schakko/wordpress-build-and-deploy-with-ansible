@@ -28,7 +28,7 @@ These are the steps to setup the WordPress environment:
 	# download WordPress ZIP distribution and unzip it to src/wordpress
 	$ cp src/wordpress/wp-config-sample.php src/wp-config.php
 	# checkout this project
-	$ git checkout https://github.com/schakko/wordpress-build-and-deploy-with-ansible.git my-uberspace/build-and-deploy
+	$ git clone https://github.com/schakko/wordpress-build-and-deploy-with-ansible.git my-uberspace/build-and-deploy
 	# copy my-uberspace/build-and-deploy/environment/sample config/environment/prod
 	$ cp build-and-deploy/environment/sample config/environment/prod
 	# Ansible will stop, if the file .env does not exist inside the target's src/ directory.
