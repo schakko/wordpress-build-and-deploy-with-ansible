@@ -1,4 +1,5 @@
 - hosts: local
   roles:
     - { role: common }
+    - { role: activate }
     - { role: update }
