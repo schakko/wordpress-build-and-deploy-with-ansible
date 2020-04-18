@@ -73,6 +73,16 @@ Note: `$ANSIBLE` is a shortcut for `ansible-playbook -i ../config/environment/pr
 |deploy my local WordPress instance o remote?|`$ANSIBLE -i ../config/environment/$ENV deploy.yml`||
 
 ## Details
+### Update - Update **local** WordPress instance
+It
+- updates the WordPress core files
+- updates the WordPress database if the WordPress core has been updated
+- updates any of the activated plug-ins you have defined in the YAML file
+
+Underlying, `wp-cli` is used for the job.
+
+Please note that you only update the **local** WordPress instance. After you have finished the update process, you can check your local WordPress instance. If you are fine with everything, you can push the changes to the remote system.
+
 ### Fetch - Sync remote (PROD) database and files to local system
 It
 - downloads the latest MySQL backup

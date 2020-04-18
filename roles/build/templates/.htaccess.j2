@@ -8,11 +8,11 @@ RewriteRule ^(.*)$ https://{{ web_domain }}/$1 [R=301,L]
 
 # Make sure we don't leak any private information
 RedirectMatch 403 ^.*/.bak.*
-RedirectMatch 403 ^/vendor/.*$
-RedirectMatch 403 ^.*/.env
+RedirectMatch 403 ^.*/\.env*
 RedirectMatch 403 ^.*/composer.*
-RedirectMatch 403 ^.*/.git/.*
-RedirectMatch 403 ^.*/.gitignore
+RedirectMatch 403 ^.*/\.git/.*
+RedirectMatch 403 ^.*/\.gitignore
+RedirectMatch 403 ^README.md
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
