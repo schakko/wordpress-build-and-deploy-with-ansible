@@ -1,0 +1,12 @@
+- name: Update main theme if update is available
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} theme update {{ wordpress.theme }}"
+  register: r_theme_update
+  changed_when: "r_theme_update.rc != 0"
+
+- name: Update parent theme if parent theme is configured and parent theme update is available
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} theme update {{ wordpress.parent_theme }}"
+  when: "wordpress.parent_theme is defined"
+  register: r_parent_theme_update
+  changed_when: "r_parent_theme_update.rc != 0"

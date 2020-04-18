@@ -1,2 +1,11 @@
-- import_tasks: wordpress.yml
+- debug: msg="Updating local WordPress instance (core, themes and plug-ins)"
+
+- import_tasks: wp-core.yml
   tags: [ 'wordpress' ]
+
+- import_tasks: themes.yml
+  tags: [ 'wordpress' ]
+
+- import_tasks: plugins.yml
+  tags: [ 'wordpress' ]
+

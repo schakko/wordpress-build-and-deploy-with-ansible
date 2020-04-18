@@ -1,5 +1,3 @@
-- debug: msg="Updating local WordPress instance (core and plug-ins)"
-
 - name: Checking for WordPress update
   shell:
     "{{ tools.wpcli }} --path={{ wordpress_target_directory }} core check-update --format=csv | wc -l"
@@ -20,10 +18,3 @@
     "{{ tools.wpcli }} --path={{ wordpress_target_directory }} core update-db"
   register: r_core_update
   changed_when: "r_core_update.rc != 0"
-
-- name: Try to update all WordPress plug-ins to latest version
-  shell:
-    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} --all plugin update"
-  register: r_plugins_update
-  # 'already updated' is printed when everything is available
-  changed_when: "'already updated' not in r_plugins_update.stdout"

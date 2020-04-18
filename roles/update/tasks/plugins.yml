@@ -1,0 +1,6 @@
+- name: Try to update all WordPress plug-ins to latest version
+  shell:
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} --all plugin update"
+  register: r_plugins_update
+  # 'already updated' is printed when everything is available
+  changed_when: "'already updated' not in r_plugins_update.stdout"

@@ -14,3 +14,4 @@
 - name: "Run any custom 'npm run build' scripts"
   shell: "cd {{ item }} && npm run build"
   with_items: "{{ build.vue_js }}"
+  when: "build is defined"

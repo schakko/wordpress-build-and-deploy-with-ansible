@@ -68,9 +68,9 @@ Note: `$ANSIBLE` is a shortcut for `ansible-playbook -i ../config/environment/pr
 
 | Task | Command | Note |
 | --- | --- | --- |
-|create a remote database dump and download it?|$ANSIBLE pull.yml --tags make-database-snapshot|Snapshot can be found in the *.download* directory|
-|update local WordPress and all plug-ins?|$ANSIBLE update.yml||
-|deploy my local WordPress instance?|$ANSIBLE deploy.yml||
+|create a remote database dump and download it?|`$ANSIBLE pull.yml --tags make-database-snapshot`|Snapshot can be found in the *.download* directory|
+|update local WordPress and all plug-ins?|`$ANSIBLE -i ../config/environment/$ENV -l local update.yml`||
+|deploy my local WordPress instance o remote?|`$ANSIBLE -i ../config/environment/$ENV deploy.yml`||
 
 ## Details
 ### Fetch - Sync remote (PROD) database and files to local system
@@ -79,9 +79,9 @@ It
 - imports the latest MySQL dump to the local database; *DROP TABLE IF EXISTS* is enabled
 
 ```
-	$ $ANSIBLE fetch.yml
+	$ $ANSIBLE -i ../config/environment/$ENV fetch.yml
 	# if you also want to include uploaded files (images etc.), use the *with-uploads* tag
-	$ $ANSIBLE --tags with-uploads fetch.yml
+	$ $ANSIBLE -i ../config/environment/$ENV --tags with-uploads fetch.yml
 ```
 
 ### Build only
@@ -97,17 +97,17 @@ It
 - enables the defined theme and plug-ins in the remote instance
 
 ```
-	$ $ANSIBLE deploy.yml
+	$ $ANSIBLE -i ../config/environment/$ENV deploy.yml
 ```
 
 ### Pull only - pulls the remote data
 The *pull.yml* only retrieves the remote files, without intefering with WordPress itlsef
 
 
-	$ $ANSIBLE pull.yml
+	$ $ANSIBLE -i ../config/environment/$ENV pull.yml
 	
 	
 ## Local deployment
 To deploy the .htaccess file to the local installation directory, you need to specify the endpoint with *-l local*:
 
-    $ $ANSIBLE -l local deploy.yml
+    $ $ANSIBLE -i ../config/environment/$ENV -l local deploy.yml
