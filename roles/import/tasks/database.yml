@@ -30,8 +30,8 @@
     login_password: "{{ database.password }}"
     # resolve database name by using its directory name
     # TODO m/b a mapping from source database to target database
-    #  get name of database based upon the filenamne (database.backup.sql.ready => database)
-    name: "{{ (item.src | dirname | basename).split(".")[0] }}"
+    #  get name of database based upon the filename (database.backup.sql.ready => database)
+    name: "{{ (item.src | dirname | basename).split('.')[0] }}"
     target: "{{ item.src }}"
     state: import
   with_filetree: "{{ download_dir }}"
