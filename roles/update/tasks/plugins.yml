@@ -1,6 +1,10 @@
+- name: Exclude plugins from update
+  set_fact:
+    exclude_plugins: "{{ wordpress.exclude_plugins | default('', true) | join(',') }}"
+
 - name: Try to update all WordPress plug-ins to latest version
   shell:
-    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} --all plugin update"
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} --all plugin update --exclude={{ exclude_plugins }}"
   register: r_plugins_update
   # 'already updated' is printed when everything is available
   changed_when: "'already updated' not in r_plugins_update.stdout"
