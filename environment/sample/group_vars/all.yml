@@ -20,6 +20,9 @@ wordpress:
     - stops-core-theme-and-plugin-updates
     - syntaxhighlighter
     - wordpress-seo
+  # each plug-in will be excluded from update
+  exclude_plugins:
+    - wordpress-seo
 
 build:
   # runs "npm run build" in each of these directories if you have vue.js in your theme
