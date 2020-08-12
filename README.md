@@ -50,7 +50,7 @@ You'll end up with the following directory structure:
 
 
 ## Install wp-cli
-
+You need to have `wp-cli` >= 2.4.0 installed.
 
     $ curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     $ chmod +x wp-cli.phar
