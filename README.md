@@ -91,19 +91,27 @@ wordpress:
     - redux-framework
     - safe-svg
     - custom-post-type-ui
-    - "https://ninetheme.com/documentation/plugins/the-grid.zip"
-    - "https://ninetheme.com/documentation/plugins/meta-box-show-hide.zip"
-    - "https://ninetheme.com/documentation/plugins/meta-box-tabs.zip"
-    - "https://ninetheme.com/documentation/plugins/js_composer.zip"
-    - "https://ninetheme.com/documentation/plugins/revolution_slider.zip"
-    - "../src/wp-content/themes/techland/plugins/techland-shortcodes.zip"
+    - the-grid
+    - meta-box-show-hide
+    - meta-box-tabs
+    - js_composer
+    - revolution_slider
+    - techland-shortcodes
+# Get additional ZIP for Techland ZIP files
+  plugins_sources:
+    the-grid: "https://ninetheme.com/documentation/plugins/the-grid.zip"
+    meta-box-show-hide: "https://ninetheme.com/documentation/plugins/meta-box-show-hide.zip"
+    meta-box-tabs: "https://ninetheme.com/documentation/plugins/meta-box-tabs.zip"
+    js_composer: "https://ninetheme.com/documentation/plugins/js_composer.zip"
+    revolution_slider: "https://ninetheme.com/documentation/plugins/revolution_slider.zip"
+    techland-shortcodes: "../src/wp-content/themes/techland/plugins/techland-shortcodes.zip"
 ```
 If your plug-in is not available via HTTP, you can manually download it, put it into the `../assets` directory and reference it with
 
 ```
 wordpress:
-  plugins:
-    - "../assets/my-plugin.zip"
+  plugins_sources:
+    my_plugin: "../assets/my-plugin.zip"
 ```
 
 ## Details
