@@ -38,6 +38,7 @@ These are the steps to setup the WordPress environment:
 
 You'll end up with the following directory structure:
 
+	/assets					# Plug-ins, you have downloaded
 	/build-and-deploy			# This Git repository
 	/src					# WordPress source goes here, managed by own git repository
 	/src/vendor				# Composer dependencies, if used
@@ -49,7 +50,7 @@ You'll end up with the following directory structure:
 
 
 ## Install wp-cli
-
+You need to have `wp-cli` >= 2.4.0 installed.
 
     $ curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     $ chmod +x wp-cli.phar
@@ -64,13 +65,54 @@ You'll end up with the following directory structure:
 # Usage
 Note: `$ANSIBLE` is a shortcut for `ansible-playbook -i ../config/environment/prod`.
 
-## How do i ...
+## FAQ
+### How do I ... ?
 
 | Task | Command | Note |
 | --- | --- | --- |
 |create a remote database dump and download it?|`$ANSIBLE pull.yml --tags make-database-snapshot`|Snapshot can be found in the *.download* directory|
 |update local WordPress and all plug-ins?|`$ANSIBLE -i ../config/environment/$ENV -l local update.yml`||
 |deploy my local WordPress instance o remote?|`$ANSIBLE -i ../config/environment/$ENV deploy.yml`||
+
+### How do deal with plug-ins not coming from WordPress' plug-in directory?
+
+If you have a theme like *techland*, there are some plug-ins which are additionally downloaded during the setup from a 3rd party site or even available in the themes directory themselve.
+In case of the *techland* theme, I took a quick look into its *functions.php* and added all plugins to the *wordpress.plugins* section of the `all.yml` file:
+
+```
+wordpress:
+  theme: my_own_theme
+  parent_theme: techland
+  plugins:
+    - plugin-1
+# Techland theme required
+    - contact-form-7
+    - meta-box
+    - redux-framework
+    - safe-svg
+    - custom-post-type-ui
+    - the-grid
+    - meta-box-show-hide
+    - meta-box-tabs
+    - js_composer
+    - revolution_slider
+    - techland-shortcodes
+# Get additional ZIP for Techland ZIP files
+  plugins_sources:
+    the-grid: "https://ninetheme.com/documentation/plugins/the-grid.zip"
+    meta-box-show-hide: "https://ninetheme.com/documentation/plugins/meta-box-show-hide.zip"
+    meta-box-tabs: "https://ninetheme.com/documentation/plugins/meta-box-tabs.zip"
+    js_composer: "https://ninetheme.com/documentation/plugins/js_composer.zip"
+    revolution_slider: "https://ninetheme.com/documentation/plugins/revolution_slider.zip"
+    techland-shortcodes: "../src/wp-content/themes/techland/plugins/techland-shortcodes.zip"
+```
+If your plug-in is not available via HTTP, you can manually download it, put it into the `../assets` directory and reference it with
+
+```
+wordpress:
+  plugins_sources:
+    my_plugin: "../assets/my-plugin.zip"
+```
 
 ## Details
 ### Update - Update **local** WordPress instance
