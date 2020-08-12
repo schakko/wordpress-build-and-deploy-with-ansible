@@ -11,7 +11,8 @@
 
 - name: "Install plug-ins defined in playbook if not already installed"
   shell:
-    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} plugin install {{ item }}"
+    # with .zip files we need to use --force because otherwise the update will fail
+    "{{ tools.wpcli }} --path={{ wordpress_target_directory }} {{ '--force' if (wordpress.plugins_sources[item] is defined) else '' }} plugin install {{ item if (wordpress.plugins_sources[item] is not defined) else wordpress.plugins_sources[item] }}"
   with_items: "{{ wordpress.plugins }}"
   when: item not in r_active_plugins_pre_activate.stdout
 
